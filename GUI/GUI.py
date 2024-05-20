@@ -4,8 +4,6 @@ from src.ConnectFour import ConnectFour
 player_colors = {'X': 'yellow', 'O': 'red'}
 
 pygame.init()
-pygame.mixer.music.load('../src/background.mp3')
-pygame.mixer.music.play(-1)
 rows = 6  # Replace with the number of rows you want
 columns = 7  # Replace with the number of columns you want
 cell_size = min(700 // columns, 700 // (rows + 1))  # Calculate cell size based on board dimensions
@@ -48,9 +46,6 @@ while running:
                 pygame.display.set_caption(
                     f"Player {game.current_player} wins!")
                 game_over = True
-                pygame.mixer.music.stop()
-                win_sound = pygame.mixer.Sound('../src/win.mp3')
-                win_sound.play()
     screen.fill("blue")
     display_turn(screen, game.current_player)
     draw_grid(screen, game.board)
