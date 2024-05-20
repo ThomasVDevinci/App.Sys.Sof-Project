@@ -61,7 +61,7 @@ while running:
                 win_sound = pygame.mixer.Sound('../src/win.mp3')
                 win_sound.play()
 
-    screen.fill((0, 0, 128))  # Blue background
+    screen.fill((10, 10, 150))  # Blue background
     display_turn(screen, game.current_player)
     draw_grid(screen, game.board)
 
@@ -76,13 +76,15 @@ while running:
         end_pos = (win_coordinates[-1][1] * cell_size + cell_size // 2,
                    win_coordinates[-1][0] * cell_size + cell_size // 2 + offset_y)
         if animation_progress < 100:
-            pygame.draw.line(screen, (0, 0, 128), start_pos, (
+            pygame.draw.line(screen, (10, 10, 150), start_pos, (
                 start_pos[0] + (end_pos[0] - start_pos[0]) * animation_progress / 100,
                 start_pos[1] + (end_pos[1] - start_pos[1]) * animation_progress / 100), 5)
             animation_progress += 1
             pygame.time.wait(20)
         else:
-            winner_text = font.render(f"Player {player_colors[game.current_player]} wins!", True, (0, 0, 139))
+            winner_text = font.render(f"Player {player_colors[game.current_player]} wins!", True, (241, 196, 15))
+            screen.blit(font.render(f"Player {player_colors[game.current_player]} wins!", True, (0, 0, 0)),
+                        (350 - winner_text.get_width() // 2 + 5, 300 - winner_text.get_height() // 2 + 5))
             screen.blit(winner_text, (350 - winner_text.get_width() // 2, 300 - winner_text.get_height() // 2))
 
     pygame.display.flip()
