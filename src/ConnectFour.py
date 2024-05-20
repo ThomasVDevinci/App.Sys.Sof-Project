@@ -7,12 +7,15 @@ class ConnectFour:
         self.current_player = 'X'
         self.state_matrix = []
 
+
     def drop_piece(self, column):
+        if self.board[0][column] != ' ':
+            return False
         for row in reversed(self.board):
             if row[column] == ' ':
                 row[column] = self.current_player
                 self.state_matrix.append(copy.deepcopy(self.board))
-                return
+                return True
 
     def print_board(self):
         print('  ' + ' '.join(map(str, range(1, 8))))
