@@ -22,7 +22,6 @@ def display_turn(display, player):
 def draw_grid(display, board):
     for i in range(6):
         for j in range(7):
-            pygame.draw.rect(display, (255, 255, 255), (j * cell_size, i * cell_size + offset_y, cell_size, cell_size), 1)
             pygame.draw.circle(display, (255, 255, 255), (j * cell_size + cell_size // 2, i * cell_size + cell_size // 2 + offset_y), cell_size // 2 - 5)
             if board[i][j] != ' ':
                 color = (255, 0, 0) if board[i][j] == 'X' else (255, 255, 0)
