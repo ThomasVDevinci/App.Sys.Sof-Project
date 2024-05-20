@@ -4,13 +4,14 @@ from src.ConnectFour import ConnectFour
 player_colors = {'X': 'yellow', 'O': 'red'}
 
 pygame.init()
-screen = pygame.display.set_mode((700, 700))
+rows = 6  # Replace with the number of rows you want
+columns = 7  # Replace with the number of columns you want
+cell_size = min(700 // columns, 700 // (rows + 1))  # Calculate cell size based on board dimensions
+screen = pygame.display.set_mode((cell_size * columns, cell_size * (rows + 1)))  # Calculate screen size based on board dimensions
 running = True
 font = pygame.font.Font(None, 84)
-cell_size = 100
-game = ConnectFour()
+game = ConnectFour(rows, columns)
 offset_y = 50
-
 
 def display_turn(display, player):
     font = pygame.font.Font(None, 36)
@@ -20,13 +21,12 @@ def display_turn(display, player):
 
 
 def draw_grid(display, board):
-    for i in range(6):
-        for j in range(7):
+    for i in range(game.rows):
+        for j in range(game.columns):
             pygame.draw.circle(display, (255, 255, 255), (j * cell_size + cell_size // 2, i * cell_size + cell_size // 2 + offset_y), cell_size // 2 - 5)
             if board[i][j] != ' ':
                 color = (255, 0, 0) if board[i][j] == 'X' else (255, 255, 0)
                 pygame.draw.circle(display, color, (j * cell_size + cell_size // 2, i * cell_size + cell_size // 2 + offset_y), cell_size // 2 - 5)
-
 
 game_over = False
 win_coordinates = None

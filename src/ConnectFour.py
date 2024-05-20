@@ -1,12 +1,12 @@
 import copy
 
-
 class ConnectFour:
-    def __init__(self):
-        self.board = [[' ' for _ in range(7)] for _ in range(6)]
+    def __init__(self, rows=6, columns=7):
+        self.rows = rows
+        self.columns = columns
+        self.board = [[' ' for _ in range(columns)] for _ in range(rows)]
         self.current_player = 'X'
         self.state_matrix = []
-
 
     def drop_piece(self, column):
         if self.board[0][column] != ' ':
@@ -24,25 +24,21 @@ class ConnectFour:
         print('  ' + ' '.join(map(str, range(1, 8))))
 
     def check_win(self):
-        for row in range(6):
-            for i in range(4, 7):
-                if self.board[row][i] != ' ' and self.board[row][i] == self.board[row][i - 1] == self.board[row][
-                    i - 2] == self.board[row][i - 3]:
-                    return [(row, i), (row, i - 1), (row, i - 2), (row, i - 3)]
-        for col in range(7):
-            for i in range(3, 6):
-                if self.board[i][col] != ' ' and self.board[i][col] == self.board[i - 1][col] == self.board[i - 2][
-                    col] == self.board[i - 3][col]:
-                    return [(i, col), (i - 1, col), (i - 2, col), (i - 3, col)]
-        for row in range(3, 6):
-            for col in range(4, 7):
-                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row - 1][col - 1] == \
-                        self.board[row - 2][col - 2] == self.board[row - 3][col - 3]:
-                    return [(row, col), (row - 1, col - 1), (row - 2, col - 2), (row - 3, col - 3)]
-        for row in range(3, 6):
-            for col in range(3):
-                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row - 1][col + 1] == \
-                        self.board[row - 2][col + 2] == self.board[row - 3][col + 3]:
+        for row in range(self.rows):
+            for col in range(self.columns - 3):
+                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row][col + 1] == self.board[row][col + 2] == self.board[row][col + 3]:
+                    return [(row, col), (row, col + 1), (row, col + 2), (row, col + 3)]
+        for col in range(self.columns):
+            for row in range(self.rows - 3):
+                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row + 1][col] == self.board[row + 2][col] == self.board[row + 3][col]:
+                    return [(row, col), (row + 1, col), (row + 2, col), (row + 3, col)]
+        for row in range(self.rows - 3):
+            for col in range(self.columns - 3):
+                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row + 1][col + 1] == self.board[row + 2][col + 2] == self.board[row + 3][col + 3]:
+                    return [(row, col), (row + 1, col + 1), (row + 2, col + 2), (row + 3, col + 3)]
+        for row in range(3, self.rows):
+            for col in range(self.columns - 3):
+                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row - 1][col + 1] == self.board[row - 2][col + 2] == self.board[row - 3][col + 3]:
                     return [(row, col), (row - 1, col + 1), (row - 2, col + 2), (row - 3, col + 3)]
         return False
 

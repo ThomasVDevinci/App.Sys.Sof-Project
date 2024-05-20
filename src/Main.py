@@ -1,6 +1,8 @@
 def main():
     global game
-    game = ConnectFour()
+    rows = int(input("Enter the number of rows for the board: "))
+    columns = int(input("Enter the number of columns for the board: "))
+    game = ConnectFour(rows, columns)
     while True:
         game.print_board()
         column = int(input(f"Player {game.current_player}, choose a column: ")) - 1
