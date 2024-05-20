@@ -2,11 +2,10 @@ import copy
 
 
 class ConnectFour:
-    def __init__(self):
-        self.board = [[' ' for _ in range(7)] for _ in range(6)]
+    def __init__(self, dimension):
+        self.board = [[' ' for _ in range(dimension)] for _ in range(dimension)]
         self.current_player = 'X'
         self.state_matrix = []
-
 
     def drop_piece(self, column):
         if self.board[0][column] != ' ':

@@ -1,14 +1,48 @@
 import pygame
+import pygame_gui
 from src.ConnectFour import ConnectFour
 
 player_colors = {'X': 'yellow', 'O': 'red'}
 
 pygame.init()
+
+manager = pygame_gui.UIManager((400, 300))
+clock = pygame.time.Clock()
+
+dimension_text_box = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((150, 100), (100, 50)), manager=manager)
+start_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((150, 200), (100, 50)), text='Start', manager=manager)
+
+window_surface = pygame.display.set_mode((400, 300))
+
+running = True
+while running:
+    time_delta = clock.tick(60) / 1000.0
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.USEREVENT and event.user_type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == start_button:
+            try:
+                dimension = int(dimension_text_box.get_text())
+                if dimension <= 0:
+                    raise ValueError
+                running = False
+            except ValueError:
+                print("Invalid input. Please enter a positive integer.")
+        manager.process_events(event)
+
+    manager.update(time_delta)
+
+    window_surface.fill((255, 255, 255))
+    manager.draw_ui(window_surface)
+
+    pygame.display.update()
+
+game = ConnectFour(dimension)
+
 screen = pygame.display.set_mode((700, 700))
 running = True
 font = pygame.font.Font(None, 84)
 cell_size = 100
-game = ConnectFour()
 offset_y = 50
 
 
