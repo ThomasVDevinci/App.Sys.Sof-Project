@@ -1,21 +1,21 @@
 import copy
 
 class ConnectFour:
-    def __init__(self, rows=6, columns=7):
+    def __init__(self, rows, columns):
         self.rows = rows
         self.columns = columns
         self.board = [[' ' for _ in range(columns)] for _ in range(rows)]
         self.current_player = 'X'
-        self.state_matrix = []
 
     def drop_piece(self, column):
-        if self.board[0][column] != ' ':
-            return False
-        for row in reversed(self.board):
-            if row[column] == ' ':
-                row[column] = self.current_player
-                self.state_matrix.append(copy.deepcopy(self.board))
+        if not isinstance(column, int) or column < 0 or column >= self.columns:
+            raise ValueError("Invalid column")
+
+        for row in reversed(range(self.rows)):
+            if self.board[row][column] == ' ':
+                self.board[row][column] = self.current_player
                 return True
+        return False
     def is_draw(self):
         for row in self.board:
             if ' ' in row:

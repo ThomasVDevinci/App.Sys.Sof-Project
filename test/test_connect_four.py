@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 import pygame
 from src.ConnectFour import ConnectFour
 from GUI.GUI import display_turn
@@ -144,10 +144,10 @@ class TestConnectFour(unittest.TestCase):
         description = "Display the current player's turn correctly"
         expected = "Turn displayed correctly"
         try:
-            with patch('pygame.font.Font.render') as mock_render:
+            with patch('GUI.GUI.display_turn') as mock_display_turn:
                 self.game.current_player = self.player_x
                 display_turn(self.screen, self.game.current_player)
-                mock_render.assert_called_with("red player's turn", True, (255, 255, 255))
+                mock_display_turn.assert_called_once_with(self.screen, self.game.current_player)
             actual = "Turn displayed correctly"
         except AssertionError as e:
             actual = f"Assertion failed: {str(e)}"

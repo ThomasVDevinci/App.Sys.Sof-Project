@@ -1,3 +1,4 @@
 .idea
 cache
 test_results.csv
+venv
