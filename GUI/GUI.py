@@ -82,6 +82,10 @@ def draw_grid(display, board):
 def draw_highlight(display, column):
     pygame.draw.rect(display, (200, 200, 200), (column * cell_size, offset_y, cell_size, cell_size * game.rows), 5)
 
+def draw_line_animation(display, coordinates, progress):
+    start_x, start_y = coordinates[0]
+    end_x, end_y = coordinates[-1]
+    pygame.draw.line(display, (255, 255, 255), (start_x, start_y), (end_x, end_y), int(progress * 10))
 
 game_over = False
 win_coordinates = None
@@ -111,42 +115,27 @@ while running:
             if not game_over and game.drop_piece(column):
                 game.switch_player()
             win_coordinates = game.check_win()
-            if win_coordinates:
-                pygame.display.set_caption(f"Player {game.current_player} wins!")
+            if win_coordinates is not None:
                 game_over = True
                 pygame.mixer.music.stop()
                 win_sound = pygame.mixer.Sound('../src/win.mp3')
                 win_sound.play()
+            elif game.is_draw():  # Check if the game is a draw
+                game_over = True
+                pygame.mixer.music.stop()
 
     screen.fill((10, 10, 150))  # Blue background
     display_turn(screen, game.current_player)
     draw_grid(screen, game.board)
     draw_menu(screen)  # Draw the menu
+    restart_delay = 2000  # Delay in milliseconds
+    restart_allowed = False
 
     if not game_over:
         mouse_x, _ = pygame.mouse.get_pos()
         highlighted_column = mouse_x // cell_size
         draw_highlight(screen, highlighted_column)
-
-    if game_over and not line_animation_start:
-    # Start the line animation
-        line_animation_start = True
-        start_point = (win_coordinates[0][1] * cell_size + cell_size // 2, win_coordinates[0][0] * cell_size + cell_size // 2 + offset_y)
-        end_point = (win_coordinates[-1][1] * cell_size + cell_size // 2, win_coordinates[-1][0] * cell_size + cell_size // 2 + offset_y)
-
-    if line_animation_start and not line_animation_done:
-        # Increment the animation progress
-        line_animation_progress += 1
-        # Draw the line animation
-        current_point = (start_point[0] + (end_point[0] - start_point[0]) * line_animation_progress / 100,
-                         start_point[1] + (end_point[1] - start_point[1]) * line_animation_progress / 100)
-        pygame.draw.line(screen, (255, 255, 255), start_point, current_point, 5)
-        if line_animation_progress >= 100:
-            # The animation has reached the end point
-            line_animation_done = True
-            pygame.time.wait(1000)  # Wait for 2 seconds
-
-    if game_over and line_animation_done:
+    if game_over:
         # Draw the end game overlay
         overlay = pygame.Surface((screen.get_width(), screen.get_height()))  # Create a new surface
         overlay.fill((0, 0, 0))  # Fill the surface with black
@@ -154,10 +143,20 @@ while running:
         screen.blit(overlay, (0, 0))  # Draw the overlay on the screen
 
         # Draw the end game text
-        winner_text = font.render(f"Player {player_colors[game.current_player]} wins!", True, (241, 196, 15))
-        screen.blit(font.render(f"Player {player_colors[game.current_player]} wins!", True, (0, 0, 0)),
-                    (350 - winner_text.get_width() // 2 + 5, 300 - winner_text.get_height() // 2 + 5))
-        screen.blit(winner_text, (350 - winner_text.get_width() // 2, 300 - winner_text.get_height() // 2))
+        if win_coordinates is not None:
+            winner_text = font.render(f"Player {player_colors[game.current_player]} wins!", True, (241, 196, 15))
+            if not line_animation_start:
+                line_animation_start = True
+                line_animation_start_time = pygame.time.get_ticks()
+            elif not line_animation_done:
+                line_animation_progress = (pygame.time.get_ticks() - line_animation_start_time) / 1000.0
+                if line_animation_progress >= 1.0:
+                    line_animation_done = True
+                    line_animation_progress = 1.0
+            draw_line_animation(screen, win_coordinates, line_animation_progress)
+        else:
+            winner_text = font.render("The game is a draw!", True, (241, 196, 15))
+        screen.blit(winner_text, (350 - winner_text.get_width() // 2, 300 - winner_text.get_height() // 2))  # Draw the text on the screen, not the overlay
 
         # Draw the "Restart" button under the end game text
         button_x = screen.get_width() // 2 - restart_button_width // 2  # X position of the button

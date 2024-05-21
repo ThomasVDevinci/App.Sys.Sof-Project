@@ -1,5 +1,6 @@
 import copy
 
+
 class ConnectFour:
     def __init__(self, rows, columns):
         self.rows = rows
@@ -16,6 +17,7 @@ class ConnectFour:
                 self.board[row][column] = self.current_player
                 return True
         return False
+
     def is_draw(self):
         for row in self.board:
             if ' ' in row:
@@ -31,21 +33,25 @@ class ConnectFour:
     def check_win(self):
         for row in range(self.rows):
             for col in range(self.columns - 3):
-                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row][col + 1] == self.board[row][col + 2] == self.board[row][col + 3]:
+                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row][col + 1] == self.board[row][
+                    col + 2] == self.board[row][col + 3]:
                     return [(row, col), (row, col + 1), (row, col + 2), (row, col + 3)]
         for col in range(self.columns):
             for row in range(self.rows - 3):
-                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row + 1][col] == self.board[row + 2][col] == self.board[row + 3][col]:
+                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row + 1][col] == \
+                        self.board[row + 2][col] == self.board[row + 3][col]:
                     return [(row, col), (row + 1, col), (row + 2, col), (row + 3, col)]
         for row in range(self.rows - 3):
             for col in range(self.columns - 3):
-                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row + 1][col + 1] == self.board[row + 2][col + 2] == self.board[row + 3][col + 3]:
+                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row + 1][col + 1] == \
+                        self.board[row + 2][col + 2] == self.board[row + 3][col + 3]:
                     return [(row, col), (row + 1, col + 1), (row + 2, col + 2), (row + 3, col + 3)]
         for row in range(3, self.rows):
             for col in range(self.columns - 3):
-                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row - 1][col + 1] == self.board[row - 2][col + 2] == self.board[row - 3][col + 3]:
+                if self.board[row][col] != ' ' and self.board[row][col] == self.board[row - 1][col + 1] == \
+                        self.board[row - 2][col + 2] == self.board[row - 3][col + 3]:
                     return [(row, col), (row - 1, col + 1), (row - 2, col + 2), (row - 3, col + 3)]
-        return False
+        return None  # Return None when there is no win
 
     def switch_player(self):
         self.current_player = 'O' if self.current_player == 'X' else 'X'
