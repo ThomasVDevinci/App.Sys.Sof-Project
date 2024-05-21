@@ -1,8 +1,7 @@
 import unittest
 import pygame
-from unittest.mock import MagicMock
-from src.ConnectFour import ConnectFour
-from GUI.GUI import display_turn
+from connect_four.ConnectFour import ConnectFour
+from GUI.GUI import GUI  # Update the import to match the new module
 import csv
 
 class TestConnectFour(unittest.TestCase):
@@ -145,7 +144,8 @@ class TestConnectFour(unittest.TestCase):
         expected = "Turn displayed correctly"
         try:
             self.game.current_player = self.player_x
-            display_turn(self.screen, self.game.current_player)
+            gui = GUI(self.screen, self.game, 100, 50)  # Initialize GUI with necessary parameters
+            gui.display_turn(self.screen, self.game.current_player)
             # Check if the screen surface was modified correctly
             # You can add more specific checks based on your requirements
             actual = "Turn displayed correctly"
