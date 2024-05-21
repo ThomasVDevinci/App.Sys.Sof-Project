@@ -16,6 +16,11 @@ class ConnectFour:
                 row[column] = self.current_player
                 self.state_matrix.append(copy.deepcopy(self.board))
                 return True
+    def is_draw(self):
+        for row in self.board:
+            if ' ' in row:
+                return False
+        return True
 
     def print_board(self):
         print('  ' + ' '.join(map(str, range(1, 8))))

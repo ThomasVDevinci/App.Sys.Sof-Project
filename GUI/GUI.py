@@ -20,6 +20,7 @@ def display_turn(display, player):
     font = pygame.font.Font(None, 36)
     color = "yellow" if player == 'O' else "red"
     text = font.render(f"{color} player's turn", True, (255, 255, 255))
+    screen.blit(font.render(f"{color} player's turn", True, (0, 0, 0)), (350 - text.get_width() // 2 + 5, 10 + 5))
     display.blit(text, (350 - text.get_width() // 2, 10))
 
 
